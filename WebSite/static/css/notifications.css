@@ -1,0 +1,14 @@
+/* Stile per le notifiche recenti */
+.recent-alert {
+    animation: blink 1s infinite alternate; /* Animazione che fa lampeggiare di rosso */
+}
+
+/* Animazione per il lampeggio */
+@keyframes blink {
+    from {
+        background-color: inherit; /* Colore di sfondo predefinito */
+    }
+    to {
+        background-color: red; /* Colore di sfondo rosso */
+    }
+}

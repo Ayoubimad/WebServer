@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block title %}Notifications - Alert System{% endblock %}
+
+{% block content %}
+    <div class="home-content">
+        {% if user_alerts %}
+            {% for alert in user_alerts %}
+                <div id="alert-{{ alert.id }}"
+                     class="card text-center mb-3 {% if alert.recent %}recent-alert{% endif %}">
+                    <div class="card-header">
+                        Alert!!!
+                        <a aria-label="Close" onclick="deleteAlert({{ alert.id }})"
+                                style="position: absolute; top: 0; right: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor"
+                                 class="bi bi-x-circle" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16"/>
+                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Anomaly Detected</h5>
+                        <p class="card-text">Anomaly at Latitude: {{ alert.latitude }}
+                            Longitude: {{ alert.longitude }}</p>
+                        <a href="https://www.google.com/maps/search/?api=1&query={{ alert.latitude }},{{ alert.longitude }}"
+                           class="btn btn-primary">Open Google Maps</a>
+                    </div>
+                    <div class="card-footer text-body-secondary">
+                        Date: {{ alert.date }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No alerts found.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function deleteAlert(alertId) {
+            console.log("Alert clicked!");
+            let data = {
+                'alert_id': alertId
+            };
+            fetch('/delete_alert/', {
+                method: 'PUT',
+                body: JSON.stringify(data)
+            })
+                .then(response => {
+                    if (response.ok) {
+                        console.log(response.status)
+                        $("#alert-" + alertId).remove();
+
+                    } else {
+                        throw new Error('Failed to delete alert.');
+                    }
+                })
+                .catch(error => {
+                    console.log('Error occurred while deleting alert:', error);
+                });
+        }
+    </script>
+{% endblock %}
