@@ -1,10 +1,6 @@
 # REST API
 
-Implementazione di una piccola API REST
-
-## API BETA
-
-offre funzionalità CRUD (Create, Read, Update, Delete) per gestire i dati dei veicoli nel sistema.
+Implementazione di una piccola API REST offre funzionalità CRUD (Create, Read, Update, Delete) per gestire i dati dei veicoli nel sistema.
 
 ## Endpoint e operazioni supportate
 

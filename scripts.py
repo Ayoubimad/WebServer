@@ -19,7 +19,7 @@ def create_users_and_vehicles():
 
 
 def create_alerts():
-    # Coordinare Modena
+    # Coordinate di Modena
     modena_latitude = 44.647128
     modena_longitude = 10.925226
 
@@ -27,7 +27,17 @@ def create_alerts():
     for vehicle in Vehicle.objects.all():
         # Creazione di 3 alert per ogni veicolo
         for i in range(1, 4):
-            alert = Alert.objects.create(sender=vehicle, latitude=modena_latitude + i, longitude=modena_longitude - 1,
+            # Se l'indice i è pari, posiziona l'alert entro il raggio di 5 km, altrimenti no
+            if i % 2 == 0:
+                # Coordinate per alert all'interno del raggio di 5 km
+                alert_latitude = modena_latitude + 0.01 * i
+                alert_longitude = modena_longitude - 0.01 * i
+            else:
+                # Coordinate per alert al di fuori del raggio di 5 km
+                alert_latitude = modena_latitude + 0.1 * i
+                alert_longitude = modena_longitude - 0.1 * i
+
+            alert = Alert.objects.create(sender=vehicle, latitude=alert_latitude, longitude=alert_longitude,
                                          smoke=vehicle.smoke, temperature=vehicle.temperature)
             # Associazione degli alert con tutti gli altri veicoli (tranne il mittente)
             for receiver_vehicle in Vehicle.objects.exclude(pk=vehicle.pk):

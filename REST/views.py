@@ -3,11 +3,11 @@ from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.views import APIView
 
-from REST.models import Vehicle
-from REST.serializers import VehicleSerializer
+from REST.models import Vehicle, Alert
+from REST.serializers import VehicleSerializer, AlertSerializer
 
 
-def get_object(vehicle_id):
+def get_vehicle_object(vehicle_id):
     """Get a vehicle object by its ID.
 
     Args:
@@ -39,7 +39,7 @@ class VehiclesAPI(APIView):
             JsonResponse: JSON response containing vehicle data.
         """
         if vehicle_id is not None:
-            vehicle = get_object(vehicle_id)
+            vehicle = get_vehicle_object(vehicle_id)
             serializer = VehicleSerializer(vehicle)
             return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
         else:
@@ -57,7 +57,7 @@ class VehiclesAPI(APIView):
         Returns:
             HttpResponse: HTTP response indicating success or failure.
         """
-        vehicle = get_object(vehicle_id)
+        vehicle = get_vehicle_object(vehicle_id)
         serializer = VehicleSerializer(vehicle, data=request.data)
         if serializer.is_valid():
             serializer.save()
@@ -75,7 +75,7 @@ class VehiclesAPI(APIView):
             HttpResponse: HTTP response indicating success or failure.
         """
         try:
-            vehicle = get_object(vehicle_id)
+            vehicle = get_vehicle_object(vehicle_id)
             vehicle.delete()
             return HttpResponse(status=status.HTTP_204_NO_CONTENT)
         except:
@@ -95,3 +95,39 @@ class VehiclesAPI(APIView):
             serializer.save()
             return HttpResponse(status=status.HTTP_201_CREATED)
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
+
+
+class AlertsAPI(APIView):
+
+    def get(self, request):
+        """Handle GET requests.
+
+        Args:
+            request: The request object.
+
+        Returns:
+            JsonResponse: JSON response containing alerts data.
+        """
+
+        vehicles = Alert.objects.all()
+        serializer = AlertSerializer(vehicles, many=True)
+        return JsonResponse(serializer.data, safe=False, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        """Handle POST requests.
+
+        Args:
+            request: The request object.
+
+        Returns:
+            HttpResponse: HTTP response indicating success or failure.
+        """
+        serializer = AlertSerializer(data=request.data)
+        if serializer.is_valid():
+            # Otteniamo i veicoli nel raggio di 5 km dall'alert
+            alert = serializer.save()
+            vehicles_in_range = alert.get_alerts_in_range(radius=5)
+            # Associazione degli alert solo con i veicoli nel raggio
+            alert.receivers.set(vehicles_in_range)
+            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
+        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
