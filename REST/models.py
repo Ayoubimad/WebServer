@@ -43,5 +43,6 @@ class Alert(models.Model):
             distance = geopy.distance.geodesic(alert_point, vehicle_point).kilometers
             if distance <= radius:
                 vehicles_in_range.append(vehicle)
+                print("")
 
         return vehicles_in_range
