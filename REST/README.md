@@ -13,11 +13,13 @@ Implementazione di una piccola API REST offre funzionalità CRUD (Create, Read, 
 
 - **GET**: Ottiene i dettagli di un veicolo specifico.
 - **PUT**: Aggiorna un veicolo esistente.
+    json_fields = ['id', 'latitude', 'longitude', 'smoke', 'temperature']
 - **DELETE**: Elimina un veicolo esistente.
 
 ### `/api/alerts/`
 
 - **POST**: Crea un nuovo alert.
+  json_fields = ['sende_id', 'latitude', 'longitude', 'smoke', 'temperature']
 
 ### `/api/contacts/<vehicle_id>`
 
