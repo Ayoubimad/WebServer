@@ -4,24 +4,21 @@ from .models import *
 
 
 class VehicleSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Vehicle model.
+    """
+
     class Meta:
         model = Vehicle
-        fields = '__all__'
+        fields = '__all__'  # Include all fields of the Vehicle model
 
 
 class AlertSerializer(serializers.ModelSerializer):
+    """
+    Serializer for the Alert model.
+    """
+
     class Meta:
         model = Alert
         fields = ['sender', 'latitude', 'longitude', 'smoke', 'temperature']
-
-
-"""
-    sender = models.ForeignKey(Vehicle, related_name='alerts_sent', on_delete=models.CASCADE)
-    receivers = models.ManyToManyField(Vehicle, related_name='alerts_received')
-    latitude = models.FloatField(default=0)
-    longitude = models.FloatField(default=0)
-    smoke = models.FloatField(default=0)
-    temperature = models.FloatField(default=0)
-    date = models.DateTimeField(default=timezone.now)
-    recent = models.BooleanField(default=0)
-"""
+        # Include only the specified fields of the Alert model

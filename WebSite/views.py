@@ -16,27 +16,48 @@ from REST.models import User, Alert, Contact
 
 @login_required(login_url='login/')
 def home(request):
+    """
+    View function for the home page.
+
+    Displays the user's home page after login.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     user = User.objects.get(id=request.user.id)
     context = {
         'user': user,
     }
-    return render(request, "home.html")
+    return render(request, "home.html", context)
 
 
 @login_required(login_url='login/')
 def notifications(request):
+    """
+    View function for the notifications page.
+
+    Displays the notifications for the logged-in user.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     user = User.objects.get(id=request.user.id)
-    user_vehicle = user.vehicles.first()  # prima macchina dell'utente se presente (simulato, poi ci sarà da
-    # recuperare quella interessata)
+    user_vehicle = user.vehicles.first()  # Get user's first vehicle (simulated, will be retrieved from the user's vehicles)
     if user_vehicle is not None:
         user_alerts = user_vehicle.alerts_received.all()
 
-        # Calcoliamo il timestamp per mezz'ora fa
+        # Calculate timestamp for half an hour ago
         half_hour_ago = timezone.now() - timedelta(minutes=30)
 
-        # Iteriamo sulle notifiche per contrassegnare quelle recenti
+        # Iterate through alerts to mark recent ones
         for alert in user_alerts:
-            alert.recent = alert.date > half_hour_ago  # Imposta True se la data della notifica è recente
+            alert.recent = alert.date > half_hour_ago  # Set True if alert's date is recent
     else:
         user_alerts = None
 
@@ -49,6 +70,17 @@ def notifications(request):
 
 @csrf_exempt
 def delete_alert(request):
+    """
+    View function to delete an alert.
+
+    Deletes an alert with the specified ID.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     if request.method == 'PUT':
         try:
             data = json.loads(request.body)
@@ -60,8 +92,18 @@ def delete_alert(request):
             return HttpResponse(status=500)
 
 
-# Create your views here.
 def login_view(request):
+    """
+    View function for the login page.
+
+    Handles user authentication and login.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -83,11 +125,33 @@ def login_view(request):
 
 @login_required(login_url='login/')
 def logout_view(request):
+    """
+    View function for user logout.
+
+    Logs out the user.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponseRedirect object.
+    """
     logout(request)
     return HttpResponseRedirect(reverse("login"))
 
 
 def register_view(request):
+    """
+    View function for the registration page.
+
+    Handles user registration.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     if request.method == "POST":
         username = request.POST["username"]
         email = request.POST["email"]
@@ -121,11 +185,22 @@ def register_view(request):
 
 @login_required(login_url='login/')
 def contacts(request):
+    """
+    View function for the contacts page.
+
+    Displays and handles user contacts.
+
+    Args:
+        request: HttpRequest object.
+
+    Returns:
+        HttpResponse object.
+    """
     user = User.objects.get(id=request.user.id)
     if request.method == "POST":
         phone_number = request.POST.get("phone_number")
-        preix = request.POST.get("prefix")
-        phone_number = preix + phone_number
+        prefix = request.POST.get("prefix")
+        phone_number = prefix + phone_number
         if phone_number:
             contact, created = Contact.objects.get_or_create(phoneNumber=phone_number)
             user.contacts.add(contact)
@@ -134,3 +209,7 @@ def contacts(request):
             return render(request, "contacts.html", {"contacts": contacts})
     contacts = user.contacts.all()
     return render(request, "contacts.html", {"contacts": contacts})
+
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)

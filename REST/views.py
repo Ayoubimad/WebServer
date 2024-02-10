@@ -127,8 +127,8 @@ class AlertsAPI(APIView):
             alert = serializer.save()
             vehicles_in_range = alert.get_alerts_in_range(radius=5)
             alert.receivers.set(vehicles_in_range)
-            return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
-        return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponse(status=status.HTTP_201_CREATED)
+        return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
 """
