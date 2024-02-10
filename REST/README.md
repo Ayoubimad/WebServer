@@ -21,19 +21,19 @@ Esempi di utilizzo con `curl` su sistemi Linux-like:
 
 ```bash
 # Ottieni tutti i veicoli
-curl -X GET http://127.0.0.1:8000/api/vehicles/
+curl -X GET http://<IP_ADDRESS>:<PORT>/api/vehicles/
 
 # Ottieni un veicolo specifico
-curl -X GET http://127.0.0.1:8000/api/vehicles/<vehicle_id>/
+curl -X GET http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
 
 # Crea un nuovo veicolo
 curl -X POST -H "Content-Type: application/json" -d '{"id": <vehicle_id>, "latitude": <latitude>, "longitude": <longitude>}' http://<IP>:<PORT>/api/vehicles/
 
 # Aggiorna un veicolo esistente, al veicolo <vehicle_id> assegna la nuova posizione
-curl -X PUT -H "Content-Type: application/json" -d '{"id":<vehicle_id>,"latitude": <latitude>, "longitude": <longitude>}' http://<IP>:<PORT>/api/vehicles/<vehicle_id>/
+curl -X PUT -H "Content-Type: application/json" -d '{"id":<vehicle_id>,"latitude": <latitude>, "longitude": <longitude>}' http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
 
 # Elimina un veicolo
-curl -X DELETE http://<IP>:<PORT>/api/vehicles/<vehicle_id>/
+curl -X DELETE http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
 ```
 
 
