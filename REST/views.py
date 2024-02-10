@@ -124,10 +124,37 @@ class AlertsAPI(APIView):
         """
         serializer = AlertSerializer(data=request.data)
         if serializer.is_valid():
-            # Otteniamo i veicoli nel raggio di 5 km dall'alert
             alert = serializer.save()
             vehicles_in_range = alert.get_alerts_in_range(radius=5)
-            # Associazione degli alert solo con i veicoli nel raggio
             alert.receivers.set(vehicles_in_range)
             return JsonResponse(serializer.data, status=status.HTTP_201_CREATED)
         return JsonResponse(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+"""
+endpoint->   api/contacts/<vehicle_id>
+"""
+
+
+class UserAPI(APIView):
+    def get(self, request, vehicle_id):
+        """Handle GET requests.
+
+        Args:
+            request: The request object.
+            vehicle_id: The id of the vehicle.
+
+        Returns:
+            JsonResponse: JSON response containing user data.
+        """
+        try:
+            vehicle = Vehicle.objects.get(pk=vehicle_id)
+        except Vehicle.DoesNotExist:
+            return JsonResponse({"error": "Vehicle does not exist."}, status=status.HTTP_404_NOT_FOUND)
+
+        user = vehicle.owners.first()  # Assuming the vehicle has only one owner
+        if user:
+            contacts = user.contacts.all().values_list('phoneNumber', flat=True)  # Get phone numbers of the user
+            return JsonResponse({"phone_numbers": list(contacts)}, status=status.HTTP_200_OK)
+        else:
+            return JsonResponse({"error": "No user found for the given vehicle."}, status=status.HTTP_404_NOT_FOUND)

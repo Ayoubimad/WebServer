@@ -1,4 +1,4 @@
-from REST.models import Vehicle, Alert, User
+from REST.models import Vehicle, Alert, User, Contact
 
 
 def create_users_and_vehicles():
@@ -8,6 +8,10 @@ def create_users_and_vehicles():
         username = f"admin{i}"
         password = username
         user = User.objects.create_user(username=username, password=password)
+        contact = Contact.objects.create(phoneNumber='11111111111')
+        user.contacts.add(contact)
+        contact = Contact.objects.create(phoneNumber='22222222222')
+        user.contacts.add(contact)
         users.append(user)
         print(f"User '{username}' created with password '{password}'")
 
@@ -16,6 +20,10 @@ def create_users_and_vehicles():
         vehicle = Vehicle.objects.create(id=i + 1, latitude=0, longitude=0, smoke=0, temperature=0)
         user.vehicles.add(vehicle)
         print(f"Vehicle {i + 1} associated with user '{user.username}'")
+    vehicle = Vehicle.objects.get(pk=1)
+    vehicle.latitude = 10
+    vehicle.longitude = 10
+    vehicle.save()
 
 
 def create_alerts():
@@ -50,4 +58,4 @@ def script():
     Vehicle.objects.all().delete()
     Alert.objects.all().delete()
     create_users_and_vehicles()
-    create_alerts()
+    # create_alerts()

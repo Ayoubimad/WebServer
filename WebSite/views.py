@@ -11,7 +11,7 @@ from django.urls import reverse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from REST.models import User, Alert
+from REST.models import User, Alert, Contact
 
 
 @login_required(login_url='login/')
@@ -117,3 +117,20 @@ def register_view(request):
         return redirect('home')
     else:
         return render(request, "register.html")
+
+
+@login_required(login_url='login/')
+def contacts(request):
+    user = User.objects.get(id=request.user.id)
+    if request.method == "POST":
+        phone_number = request.POST.get("phone_number")
+        preix = request.POST.get("prefix")
+        phone_number = preix + phone_number
+        if phone_number:
+            contact, created = Contact.objects.get_or_create(phoneNumber=phone_number)
+            user.contacts.add(contact)
+            user.save()
+            contacts = user.contacts.all()
+            return render(request, "contacts.html", {"contacts": contacts})
+    contacts = user.contacts.all()
+    return render(request, "contacts.html", {"contacts": contacts})

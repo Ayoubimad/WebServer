@@ -4,9 +4,14 @@ from django.db import models
 from django.utils import timezone
 
 
+class Contact(models.Model):
+    phoneNumber = models.CharField(default=None, max_length=20)
+
+
 class User(AbstractUser):
     profile_pic = models.ImageField(upload_to='profile_pic/')
     vehicles = models.ManyToManyField('Vehicle', related_name='owners')
+    contacts = models.ManyToManyField('Contact', related_name='alert_contatcs')
 
 
 class Vehicle(models.Model):
