@@ -15,6 +15,14 @@ Implementazione di una piccola API REST offre funzionalità CRUD (Create, Read, 
 - **PUT**: Aggiorna un veicolo esistente.
 - **DELETE**: Elimina un veicolo esistente.
 
+### `/api/alerts/`
+
+- **POST**: Crea un nuovo alert.
+
+### `/api/contacts/<vehicle_id>`
+
+**GET**: Ottiene i contatti associati al proprietario del veicolo.
+
 ## Utilizzo
 
 Esempi di utilizzo con `curl` su sistemi Linux-like:
