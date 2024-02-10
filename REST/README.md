@@ -42,3 +42,6 @@ curl -X PUT -H "Content-Type: application/json" -d '{"id": <vehicle_id>, "latitu
 
 # Delete a vehicle
 curl -X DELETE http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
+
+# Create a new alert
+curl -X POST -H "Content-Type: application/json" -d '{"sender": 2, "latitude":10, "longitude": 10, "smoke": 0 , "temperature": 0}' http://192.168.188.70:8080/api/alerts/
