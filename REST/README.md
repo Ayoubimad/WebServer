@@ -1,48 +1,44 @@
 # REST API
 
-Implementazione di una piccola API REST offre funzionalità CRUD (Create, Read, Update, Delete) per gestire i dati dei veicoli nel sistema.
+Implementation of a small REST API providing CRUD (Create, Read, Update, Delete) functionalities to manage vehicle data in the system.
 
-## Endpoint e operazioni supportate
+## Endpoints and Supported Operations
 
 ### `/api/vehicles/`
 
-- **GET**: Ottiene l'elenco completo dei veicoli.
-- **POST**: Crea un nuovo veicolo.
+- **GET**: Retrieves the complete list of vehicles.
+- **POST**: Creates a new vehicle.
 
 ### `/api/vehicles/<vehicle_id>/`
 
-- **GET**: Ottiene i dettagli di un veicolo specifico.
-- **PUT**: Aggiorna un veicolo esistente : json_fields = ['id', 'latitude', 'longitude', 'smoke', 'temperature'].
-- **DELETE**: Elimina un veicolo esistente.
+- **GET**: Retrieves details of a specific vehicle.
+- **PUT**: Updates an existing vehicle: json_fields = ['id', 'latitude', 'longitude', 'smoke', 'temperature'].
+- **DELETE**: Deletes an existing vehicle.
 
 ### `/api/alerts/`
 
-- **POST**: Crea un nuovo alert : json_fields = ['sende_id', 'latitude', 'longitude', 'smoke', 'temperature']
+- **POST**: Creates a new alert: json_fields = ['sende_id', 'latitude', 'longitude', 'smoke', 'temperature']
 
 ### `/api/contacts/<vehicle_id>`
 
-**GET**: Ottiene i contatti associati al proprietario del veicolo.
+**GET**: Retrieves contacts associated with the vehicle owner.
 
-## Utilizzo
+## Usage
 
-Esempi di utilizzo con `curl` su sistemi Linux-like:
+Usage examples with `curl` on Linux-like systems:
 
 ```bash
-# Ottieni tutti i veicoli
+# Get all vehicles
 curl -X GET http://<IP_ADDRESS>:<PORT>/api/vehicles/
 
-# Ottieni un veicolo specifico
+# Get a specific vehicle
 curl -X GET http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
 
-# Crea un nuovo veicolo
-curl -X POST -H "Content-Type: application/json" -d '{"id": <vehicle_id>, "latitude": <latitude>, "longitude": <longitude>, "smoke": <smoke> , "temperature": <temperature>}' http://<IP>:<PORT>/api/vehicles/
+# Create a new vehicle
+curl -X POST -H "Content-Type: application/json" -d '{"id": <vehicle_id>, "latitude": <latitude>, "longitude": <longitude>, "smoke": <smoke> , "temperature": <temperature>}' http://<IP_ADDRESS>:<PORT>/api/vehicles/
 
-# Aggiorna un veicolo esistente, al veicolo <vehicle_id> assegna la nuova posizione
+# Update an existing vehicle, assign the new position to vehicle <vehicle_id>
 curl -X PUT -H "Content-Type: application/json" -d '{"id": <vehicle_id>, "latitude": <latitude>, "longitude": <longitude>, "smoke": <smoke> , "temperature": <temperature>}' http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
 
-# Elimina un veicolo
+# Delete a vehicle
 curl -X DELETE http://<IP_ADDRESS>:<PORT>/api/vehicles/<vehicle_id>/
-```
-
-
-
