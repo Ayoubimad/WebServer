@@ -131,11 +131,6 @@ class AlertsAPI(APIView):
         return HttpResponse(status=status.HTTP_400_BAD_REQUEST)
 
 
-"""
-endpoint->   api/contacts/<vehicle_id>
-"""
-
-
 class UserAPI(APIView):
     def get(self, request, vehicle_id):
         """Handle GET requests.

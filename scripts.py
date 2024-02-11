@@ -28,6 +28,10 @@ def create_users_and_vehicles():
     vehicle.latitude = 10
     vehicle.longitude = 10
     vehicle.save()
+    vehicle = Vehicle.objects.get(pk=2)
+    vehicle.latitude = 10
+    vehicle.longitude = 10
+    vehicle.save()
 
 
 def create_alerts():
